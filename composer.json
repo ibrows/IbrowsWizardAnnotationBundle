@@ -1,7 +1,7 @@
 {
     "name":         "ibrows/wizard-annotation-bundle",
     "description":  "Simple wizard for a controller with validation methods",
-    "keywords":     ["ibrows", "wizard"],
+    "keywords":     ["ibrows", "wizard", "annotation"],
     "type":         "symfony-bundle",
     "license":      "MIT",
     "version":      "1.0.0",
