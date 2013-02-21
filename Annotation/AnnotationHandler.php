@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 class AnnotationHandler
 {
     /**
-     * @var Router
+     * @var RouterInterface
      */
     protected $router;
 
@@ -33,9 +33,9 @@ class AnnotationHandler
     protected $currentActionAnnotation;
 
     /**
-     * @param Router $router
+     * @param RouterInterface $router
      */
-    public function __construct(Router $router)
+    public function __construct(RouterInterface $router)
     {
         $this->router = $router;
     }
