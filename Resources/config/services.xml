@@ -15,6 +15,13 @@
         <service id="ibrows_wizardannotation.annotation.handler" class="Ibrows\Bundle\WizardAnnotationBundle\Annotation\AnnotationHandler">
             <argument type="service" id ="router" />
         </service>
+
+        <service id="ibrows_wizardannotation.twig.extension" class="Ibrows\Bundle\WizardAnnotationBundle\Twig\TwigExtension">
+            <call method="setWizard">
+                <argument type="service" id="ibrows_wizardannotation.annotation.handler" />
+            </call>
+            <tag name="twig.extension" />
+        </service>
     </services>
 
 </container>

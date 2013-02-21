@@ -1,3 +1,7 @@
+{% if wizard is not defined  %}
+    {% set wizard = getWizard() %}
+{% endif %}
+
 {% block wizard %}
     <ul class="wizard">
 
