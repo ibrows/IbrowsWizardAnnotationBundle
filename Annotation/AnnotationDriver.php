@@ -3,6 +3,8 @@
 namespace Ibrows\Bundle\WizardAnnotationBundle\Annotation;
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
 use Doctrine\Common\Annotations\Reader;
 
 class AnnotationDriver
@@ -38,7 +40,11 @@ class AnnotationDriver
      * @param FilterControllerEvent $event
      */
     public function onKernelController(FilterControllerEvent $event)
-    {        
+    {
+        if($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST){
+            return;
+        }
+        
         $controllerArray = $event->getController();
         if(!is_array($controllerArray)){
             return;
