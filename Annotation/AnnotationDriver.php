@@ -54,6 +54,10 @@ class AnnotationDriver
         $methodName = $controllerArray[1];
         
         $controllerReflection = new \ReflectionClass($controller);
+        // Current Method is not part of wizard
+        if(!$this->reader->getMethodAnnotation($controllerReflection->getMethod($methodName), $this->annotationClassName)){
+            return;
+        }
         $annotationBags = $this->getMethodAnnotationBags($controllerReflection, $methodName);
         
         $this->annotationHandler->handle($event, $annotationBags);
