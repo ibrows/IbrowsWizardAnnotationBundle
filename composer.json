@@ -15,8 +15,6 @@
         "symfony/framework-bundle": ">=2.0"
     },
     "autoload": {
-        "psr-0": { "Ibrows\\Bundle\\WizardAnnotationBundle": "" }
-    },
-    "target-dir": "Ibrows/Bundle/WizardAnnotationBundle",
-    "minimum-stability": "dev"
+        "psr-4": { "Ibrows\\Bundle\\WizardAnnotationBundle\\": "" }
+    }
 }
