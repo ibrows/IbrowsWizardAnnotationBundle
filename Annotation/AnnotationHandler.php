@@ -31,6 +31,16 @@ class AnnotationHandler
     protected $currentActionAnnotation;
 
     /**
+     * @var FilterControllerEvent|null
+     */
+    protected $lastFilterControllerEvent = null;
+
+    /**
+     * @var array|null
+     */
+    protected $lastAnnotationBags = null;
+
+    /**
      * @param RouterInterface $router
      */
     public function __construct(RouterInterface $router)
@@ -39,12 +49,31 @@ class AnnotationHandler
     }
 
     /**
+     * @return bool
+     */
+    public function recompute()
+    {
+        if (null === $this->lastFilterControllerEvent || null === $this->lastAnnotationBags) {
+            return false;
+        }
+
+        $this->handle($this->lastFilterControllerEvent, $this->lastAnnotationBags, true);
+        return true;
+    }
+
+    /**
      * @param FilterControllerEvent $event
-     * @param AnnotationBag[] $annotationBags
+     * @param array $annotationBags
+     * @param bool $recompute
      * @throws \InvalidArgumentException
      */
-    public function handle(FilterControllerEvent $event, array $annotationBags)
+    public function handle(FilterControllerEvent $event, array $annotationBags, $recompute = false)
     {
+        if (false === $recompute) {
+            $this->lastFilterControllerEvent = $event;
+            $this->lastAnnotationBags = $annotationBags;
+        }
+
         $this->setAnnotations($annotationBags);
 
         $controllerArray = $event->getController();
@@ -82,10 +111,16 @@ class AnnotationHandler
             if (!$hasFoundCurrentAction) {
                 switch (true) {
                     case $validation === Wizard::REDIRECT_STEP_BACK:
-                        return $this->redirectByUrl($event, $this->getPrevStepUrl($annotation));
+                        if ($recompute === false) {
+                            $this->redirectByUrl($event, $this->getPrevStepUrl($annotation));
+                        }
+                        return;
                         break;
                     case ($validation instanceof Response):
-                        return $this->redirectByResponse($event, $validation);
+                        if ($recompute === false) {
+                            $this->redirectByResponse($event, $validation);
+                        }
+                        return;
                         break;
                 }
             }
@@ -137,7 +172,7 @@ class AnnotationHandler
     {
         usort(
             $annotationBags,
-            function ($a, $b) {
+            function (AnnotationBag $a, AnnotationBag $b) {
                 return $a->getAnnotation()->getNumber() > $b->getAnnotation()->getNumber();
             }
         );
