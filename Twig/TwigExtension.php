@@ -29,6 +29,7 @@ class TwigExtension extends \Twig_Extension
             'getWizard' => new \Twig_Function_Method($this, 'getWizard')
         );
     }
+    
     /**
      * @return Wizard
      */
@@ -36,6 +37,7 @@ class TwigExtension extends \Twig_Extension
     {
         return $this->wizard;
     }
+    
     /**
      * @return string
      */
