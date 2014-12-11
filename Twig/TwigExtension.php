@@ -35,7 +35,9 @@ class TwigExtension extends \Twig_Extension
      */
     public function getWizard()
     {
-        return $this->wizard;
+        $wizard = $this->wizard;
+        $wizard->recompute();
+        return $wizard;
     }
     
     /**
