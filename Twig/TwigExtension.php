@@ -40,6 +40,6 @@ class TwigExtension extends \Twig_Extension
      * @return string
      */
     public function getName() {
-        return 'cnc_extension';
+        return 'ibrows_wizard_extension';
     }
 }
