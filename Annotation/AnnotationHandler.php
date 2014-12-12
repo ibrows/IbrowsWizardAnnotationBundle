@@ -173,7 +173,10 @@ class AnnotationHandler
         usort(
             $annotationBags,
             function (AnnotationBag $a, AnnotationBag $b) {
-                return $a->getAnnotation()->getNumber() > $b->getAnnotation()->getNumber();
+                if ($a->getAnnotation()->getNumber() ==  $b->getAnnotation()->getNumber()) {
+                    return 0;
+                }
+                return $a->getAnnotation()->getNumber() > $b->getAnnotation()->getNumber()? 1 : -1;
             }
         );
 
