@@ -339,10 +339,6 @@ class AnnotationHandler
      */
     public function getNextActionAnnotation(Wizard $annotation)
     {
-        if ($annotation->isLast()) {
-            return null;
-        }
-
         //TODO: Get next annotation not by number, then it does not always have a gap of 1.
         $number = $annotation->getNumber() + 1;
 
@@ -355,10 +351,6 @@ class AnnotationHandler
      */
     public function getPrevActionAnnotation(Wizard $annotation)
     {
-        if ($annotation->isFirst()) {
-            return null;
-        }
-
         //TODO: Get previous annotation not by number, then it does not always have a gap of 1.
         $number = $annotation->getNumber() - 1;
 
@@ -371,9 +363,13 @@ class AnnotationHandler
      */
     public function isAnnotationCompleted(Wizard $annotation)
     {
+        if($annotation->isLast()){
+            return false;
+        }
+
         $nextAnnotation = $this->getNextActionAnnotation($annotation);
-        if ($nextAnnotation and $nextAnnotation->isValid()) {
-          return true;
+        if ($nextAnnotation->isValid()) {
+            return true;
         }
 
         return false;
