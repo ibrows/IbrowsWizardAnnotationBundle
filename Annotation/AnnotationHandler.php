@@ -173,18 +173,32 @@ class AnnotationHandler
         usort(
             $annotationBags,
             function (AnnotationBag $a, AnnotationBag $b) {
-                if ($a->getAnnotation()->getNumber() ==  $b->getAnnotation()->getNumber()) {
+                if ($a->getAnnotation()->getNumber() == $b->getAnnotation()->getNumber()) {
                     return 0;
                 }
-                return $a->getAnnotation()->getNumber() > $b->getAnnotation()->getNumber()? 1 : -1;
+                return $a->getAnnotation()->getNumber() > $b->getAnnotation()->getNumber() ? 1 : -1;
             }
         );
 
         $this->annotationBags = array_values($annotationBags);
 
         $annotations = array();
+
+        $count = 1;
+        $countTotal = count($annotationBags);
         foreach ($annotationBags as $annotationBag) {
-            $annotations[] = $annotationBag->getAnnotation();
+            $annotation = $annotationBag->getAnnotation();
+
+            if ($count === 0) {
+                $annotation->setIsFirst(true);
+            }
+
+            if ($count === $countTotal) {
+                $annotation->setIsLast(true);
+            }
+
+            $annotations[] = $annotation;
+            $count++;
         }
 
         $this->annotations = $annotations;
@@ -288,8 +302,7 @@ class AnnotationHandler
             $annotation = $this->getCurrentActionAnnotation();
         }
 
-        $number = $annotation->getNumber() + 1;
-        return $this->getStepUrl($this->getAnnotationByNumber($number));
+        return $this->getStepUrl($this->getNextActionAnnotation($annotation));
     }
 
     /**
@@ -302,8 +315,7 @@ class AnnotationHandler
             $annotation = $this->getCurrentActionAnnotation();
         }
 
-        $number = $annotation->getNumber() - 1;
-        return $this->getStepUrl($this->getAnnotationByNumber($number));
+        return $this->getStepUrl($this->getPrevActionAnnotation($annotation));
     }
 
     /**
@@ -319,6 +331,52 @@ class AnnotationHandler
         }
 
         throw new \RuntimeException("No current action annotation found");
+    }
+
+    /**
+     * @param Wizard $annotation
+     * @return Wizard
+     */
+    public function getNextActionAnnotation(Wizard $annotation)
+    {
+        if ($annotation->isLast()) {
+            return null;
+        }
+
+        //TODO: Get next annotation not by number, then it does not always have a gap of 1.
+        $number = $annotation->getNumber() + 1;
+
+        return $this->getAnnotationByNumber($number);
+    }
+
+    /**
+     * @param Wizard $annotation
+     * @return Wizard
+     */
+    public function getPrevActionAnnotation(Wizard $annotation)
+    {
+        if ($annotation->isFirst()) {
+            return null;
+        }
+
+        //TODO: Get previous annotation not by number, then it does not always have a gap of 1.
+        $number = $annotation->getNumber() - 1;
+
+        return $this->getAnnotationByNumber($number);
+    }
+
+    /**
+     * @param Wizard $annotation
+     * @return bool
+     */
+    public function isAnnotationCompleted(Wizard $annotation)
+    {
+        $nextAnnotation = $this->getNextActionAnnotation($annotation);
+        if ($nextAnnotation and $nextAnnotation->isValid()) {
+          return true;
+        }
+
+        return false;
     }
 
     /**
