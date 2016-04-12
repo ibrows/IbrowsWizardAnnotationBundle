@@ -16,14 +16,14 @@ class AnnotationBag
 
     /**
      * @param Wizard $annotation
-     * @param array $annotations
+     * @param array  $annotations
      */
     public function __construct(Wizard $annotation, array $annotations)
     {
         $this->annotation = $annotation;
         $this->annotations = $annotations;
     }
-    
+
     /**
      * @return Wizard
      */
@@ -31,7 +31,7 @@ class AnnotationBag
     {
         return $this->annotation;
     }
-    
+
     /**
      * @return array
      */

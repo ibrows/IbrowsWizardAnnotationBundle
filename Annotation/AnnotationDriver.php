@@ -4,7 +4,6 @@ namespace Ibrows\Bundle\WizardAnnotationBundle\Annotation;
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-
 use Doctrine\Common\Annotations\Reader;
 
 class AnnotationDriver
@@ -25,7 +24,7 @@ class AnnotationDriver
     protected $reader;
 
     /**
-     * @param Reader $reader
+     * @param Reader            $reader
      * @param AnnotationHandler $annotationHandler
      * @param $annotationClassName
      */
@@ -41,55 +40,56 @@ class AnnotationDriver
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-        if($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST){
+        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
-        
+
         $controllerArray = $event->getController();
-        if(!is_array($controllerArray)){
+        if (!is_array($controllerArray)) {
             return;
         }
-        
+
         $controller = $controllerArray[0];
         $methodName = $controllerArray[1];
-        
+
         $controllerReflection = new \ReflectionClass($controller);
         // Current Method is not part of wizard
-        if(!$this->reader->getMethodAnnotation($controllerReflection->getMethod($methodName), $this->annotationClassName)){
+        if (!$this->reader->getMethodAnnotation($controllerReflection->getMethod($methodName), $this->annotationClassName)) {
             return;
         }
         $annotationBags = $this->getMethodAnnotationBags($controllerReflection, $methodName);
-        
+
         $this->annotationHandler->handle($event, $annotationBags);
     }
 
     /**
      * @param \ReflectionClass $controller
      * @param $currentMethodName
+     *
      * @return array
      */
     protected function getMethodAnnotationBags(\ReflectionClass $controller, $currentMethodName)
     {
         $bags = array();
-        
-        foreach($controller->getMethods() as $methodReflection){
+
+        foreach ($controller->getMethods() as $methodReflection) {
             $annotation = $this->reader->getMethodAnnotation($methodReflection, $this->annotationClassName);
-            
-            if($annotation){
-                if($methodReflection->getName() == $currentMethodName){
+
+            if ($annotation) {
+                if ($methodReflection->getName() == $currentMethodName) {
                     $annotation->setIsCurrentMethod(true);
                 }
-                
+
                 $bag = new AnnotationBag(
                     $annotation,
                     $this->reader->getMethodAnnotations($methodReflection)
                 );
                 $annotation->setAnnotationBag($bag);
-                
+
                 $bags[] = $bag;
             }
         }
-        
+
         return $bags;
     }
 }

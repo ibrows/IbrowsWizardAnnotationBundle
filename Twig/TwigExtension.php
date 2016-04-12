@@ -13,23 +13,26 @@ class TwigExtension extends \Twig_Extension
 
     /**
      * @param Wizard $wizard
+     *
      * @return TwigExtension
      */
     public function setWizard(Wizard $wizard)
     {
         $this->wizard = $wizard;
+
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getFunctions(){
+    public function getFunctions()
+    {
         return array(
-            'getWizard' => new \Twig_Function_Method($this, 'getWizard')
+            'getWizard' => new \Twig_SimpleFunction('getWizard', array($this, 'getWizard')),
         );
     }
-    
+
     /**
      * @return Wizard
      */
@@ -37,13 +40,15 @@ class TwigExtension extends \Twig_Extension
     {
         $wizard = $this->wizard;
         $wizard->recompute();
+
         return $wizard;
     }
-    
+
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return 'ibrows_wizard_extension';
     }
 }

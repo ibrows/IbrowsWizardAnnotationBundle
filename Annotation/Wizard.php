@@ -59,7 +59,7 @@ class Wizard
      */
     public function setIsCurrentMethod($flag = true)
     {
-        $this->isCurrentMethod = (bool)$flag;
+        $this->isCurrentMethod = (bool) $flag;
     }
 
     /**
@@ -115,7 +115,7 @@ class Wizard
      */
     public function setIsValid($flag = true)
     {
-        $this->isValid = (bool)$flag;
+        $this->isValid = (bool) $flag;
     }
 
     /**
@@ -131,7 +131,7 @@ class Wizard
      */
     public function setIsFirst($flag = true)
     {
-        $this->isFirst = (bool)$flag;
+        $this->isFirst = (bool) $flag;
     }
 
     /**
@@ -147,7 +147,7 @@ class Wizard
      */
     public function setIsLast($flag = true)
     {
-        $this->isLast = (bool)$flag;
+        $this->isLast = (bool) $flag;
     }
 
     /**

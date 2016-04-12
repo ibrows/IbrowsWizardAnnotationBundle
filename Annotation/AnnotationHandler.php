@@ -58,13 +58,15 @@ class AnnotationHandler
         }
 
         $this->handle($this->lastFilterControllerEvent, $this->lastAnnotationBags, true);
+
         return true;
     }
 
     /**
      * @param FilterControllerEvent $event
-     * @param array $annotationBags
-     * @param bool $recompute
+     * @param array                 $annotationBags
+     * @param bool                  $recompute
+     *
      * @throws \InvalidArgumentException
      */
     public function handle(FilterControllerEvent $event, array $annotationBags, $recompute = false)
@@ -114,12 +116,14 @@ class AnnotationHandler
                         if ($recompute === false) {
                             $this->redirectByUrl($event, $this->getPrevStepUrl($annotation));
                         }
+
                         return;
                         break;
-                    case ($validation instanceof Response):
+                    case $validation instanceof Response:
                         if ($recompute === false) {
                             $this->redirectByResponse($event, $validation);
                         }
+
                         return;
                         break;
                 }
@@ -154,7 +158,7 @@ class AnnotationHandler
             $lastAnnotation = $annotation;
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -176,6 +180,7 @@ class AnnotationHandler
                 if ($a->getAnnotation()->getNumber() == $b->getAnnotation()->getNumber()) {
                     return 0;
                 }
+
                 return $a->getAnnotation()->getNumber() > $b->getAnnotation()->getNumber() ? 1 : -1;
             }
         );
@@ -198,7 +203,7 @@ class AnnotationHandler
             }
 
             $annotations[] = $annotation;
-            $count++;
+            ++$count;
         }
 
         $this->annotations = $annotations;
@@ -215,6 +220,7 @@ class AnnotationHandler
                 $annotations[] = $annotation;
             }
         }
+
         return $annotations;
     }
 
@@ -229,6 +235,7 @@ class AnnotationHandler
                 $annotations[] = $annotation;
             }
         }
+
         return $annotations;
     }
 
@@ -243,6 +250,7 @@ class AnnotationHandler
                 $annotations[] = $annotation;
             }
         }
+
         return $annotations;
     }
 
@@ -257,12 +265,15 @@ class AnnotationHandler
                 $annotations[] = $annotation;
             }
         }
+
         return $annotations;
     }
 
     /**
      * @param string $name
+     *
      * @return Wizard
+     *
      * @throws \InvalidArgumentException
      */
     public function getAnnotationByName($name)
@@ -273,12 +284,14 @@ class AnnotationHandler
             }
         }
 
-        throw new \InvalidArgumentException('WizardStep with name "' . $name . '" not found');
+        throw new \InvalidArgumentException('WizardStep with name "'.$name.'" not found');
     }
 
     /**
      * @param int $number
+     *
      * @return Wizard
+     *
      * @throws \InvalidArgumentException
      */
     public function getAnnotationByNumber($number)
@@ -289,11 +302,12 @@ class AnnotationHandler
             }
         }
 
-        throw new \InvalidArgumentException('Annotation with number ' . $number . ' not found');
+        throw new \InvalidArgumentException('Annotation with number '.$number.' not found');
     }
 
     /**
      * @param Wizard $annotation
+     *
      * @return string
      */
     public function getNextStepUrl(Wizard $annotation = null)
@@ -307,6 +321,7 @@ class AnnotationHandler
 
     /**
      * @param Wizard $annotation
+     *
      * @return string
      */
     public function getPrevStepUrl(Wizard $annotation = null)
@@ -320,6 +335,7 @@ class AnnotationHandler
 
     /**
      * @return Wizard
+     *
      * @throws \RuntimeException
      */
     public function getCurrentActionAnnotation()
@@ -330,11 +346,12 @@ class AnnotationHandler
             }
         }
 
-        throw new \RuntimeException("No current action annotation found");
+        throw new \RuntimeException('No current action annotation found');
     }
 
     /**
      * @param Wizard $annotation
+     *
      * @return Wizard
      */
     public function getNextActionAnnotation(Wizard $annotation)
@@ -347,6 +364,7 @@ class AnnotationHandler
 
     /**
      * @param Wizard $annotation
+     *
      * @return Wizard
      */
     public function getPrevActionAnnotation(Wizard $annotation)
@@ -359,11 +377,12 @@ class AnnotationHandler
 
     /**
      * @param Wizard $annotation
+     *
      * @return bool
      */
     public function isAnnotationCompleted(Wizard $annotation)
     {
-        if($annotation->isLast()){
+        if ($annotation->isLast()) {
             return false;
         }
 
@@ -377,7 +396,9 @@ class AnnotationHandler
 
     /**
      * @param Wizard $annotation
+     *
      * @return string
+     *
      * @throws \InvalidArgumentException
      */
     public function getStepUrl(Wizard $annotation = null)
@@ -392,7 +413,7 @@ class AnnotationHandler
             }
         }
 
-        throw new \InvalidArgumentException("No route found for Step " . $annotation->getName());
+        throw new \InvalidArgumentException('No route found for Step '.$annotation->getName());
     }
 
     /**
@@ -410,7 +431,7 @@ class AnnotationHandler
 
     /**
      * @param FilterControllerEvent $event
-     * @param Response $response
+     * @param Response              $response
      */
     protected function redirectByResponse(FilterControllerEvent $event, Response $response)
     {
