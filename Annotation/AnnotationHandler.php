@@ -64,8 +64,8 @@ class AnnotationHandler
 
     /**
      * @param FilterControllerEvent $event
-     * @param array                 $annotationBags
-     * @param bool                  $recompute
+     * @param array $annotationBags
+     * @param bool $recompute
      *
      * @throws \InvalidArgumentException
      */
@@ -84,6 +84,8 @@ class AnnotationHandler
         $hasFoundCurrentAction = false;
         $hasInvalidActionFound = false;
 
+        $request = $event->getRequest();
+
         foreach ($this->annotationBags as $annotationBag) {
             $annotation = $annotationBag->getAnnotation();
 
@@ -92,7 +94,7 @@ class AnnotationHandler
                 if (!method_exists($controller, $validationMethodName)) {
                     throw new \InvalidArgumentException(sprintf('Validationmethod %s:%s() not found', get_class($controller), $validationMethodName));
                 }
-                $validation = $controller->$validationMethodName();
+                $validation = $controller->$validationMethodName($request);
             } else {
                 $validation = true;
             }
@@ -284,7 +286,7 @@ class AnnotationHandler
             }
         }
 
-        throw new \InvalidArgumentException('WizardStep with name "'.$name.'" not found');
+        throw new \InvalidArgumentException('WizardStep with name "' . $name . '" not found');
     }
 
     /**
@@ -302,7 +304,7 @@ class AnnotationHandler
             }
         }
 
-        throw new \InvalidArgumentException('Annotation with number '.$number.' not found');
+        throw new \InvalidArgumentException('Annotation with number ' . $number . ' not found');
     }
 
     /**
@@ -413,7 +415,7 @@ class AnnotationHandler
             }
         }
 
-        throw new \InvalidArgumentException('No route found for Step '.$annotation->getName());
+        throw new \InvalidArgumentException('No route found for Step ' . $annotation->getName());
     }
 
     /**
@@ -431,7 +433,7 @@ class AnnotationHandler
 
     /**
      * @param FilterControllerEvent $event
-     * @param Response              $response
+     * @param Response $response
      */
     protected function redirectByResponse(FilterControllerEvent $event, Response $response)
     {

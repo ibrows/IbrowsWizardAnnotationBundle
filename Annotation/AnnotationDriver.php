@@ -2,9 +2,9 @@
 
 namespace Ibrows\Bundle\WizardAnnotationBundle\Annotation;
 
+use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Doctrine\Common\Annotations\Reader;
 
 class AnnotationDriver
 {
@@ -24,7 +24,7 @@ class AnnotationDriver
     protected $reader;
 
     /**
-     * @param Reader            $reader
+     * @param Reader $reader
      * @param AnnotationHandler $annotationHandler
      * @param $annotationClassName
      */
@@ -73,6 +73,7 @@ class AnnotationDriver
         $bags = array();
 
         foreach ($controller->getMethods() as $methodReflection) {
+            /** @var Wizard $annotation */
             $annotation = $this->reader->getMethodAnnotation($methodReflection, $this->annotationClassName);
 
             if ($annotation) {
