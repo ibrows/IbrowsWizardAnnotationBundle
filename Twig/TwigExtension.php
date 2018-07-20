@@ -29,7 +29,7 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'getWizard' => new \Twig_SimpleFunction('getWizard', array($this, 'getWizard')),
+            new \Twig_SimpleFunction('getWizard', array($this, 'getWizard')),
         );
     }
 
